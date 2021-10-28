@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.provider.token.AbstractTokenGranter;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -28,11 +29,14 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
     @Override
     protected OAuth2Authentication getOAuth2Authentication(ClientDetails client, TokenRequest tokenRequest) {
 
-        Map<String, String> parameters = tokenRequest.getRequestParameters();
-        String code = parameters.get("code");
+        Map<String, String> parameters = new LinkedHashMap<>(tokenRequest.getRequestParameters());
+        // 手机号
         String mobile = parameters.get("mobile");
+        // 验证码
+        String code = parameters.get("code");
 
-//        parameters.remove("code");
+        // 删除之后无用的参数
+        parameters.remove("code");
 
         Authentication userAuth = new SmsCodeAuthenticationToken(mobile, code, new HashSet<>());
         ((AbstractAuthenticationToken) userAuth).setDetails(parameters);
@@ -45,7 +49,7 @@ public class SmsCodeTokenGranter extends AbstractTokenGranter {
         }
 
         if (userAuth == null || !userAuth.isAuthenticated()) {
-            throw new InvalidGrantException("Could not authenticate user, mobile: " + mobile);
+            throw new InvalidGrantException("用户通过手机验证码认证失败, 用户手机号: " + mobile);
         }
 
         OAuth2Request storedOAuth2Request = getRequestFactory().createOAuth2Request(client, tokenRequest);

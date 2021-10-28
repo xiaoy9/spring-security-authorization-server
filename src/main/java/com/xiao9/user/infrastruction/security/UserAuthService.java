@@ -37,8 +37,8 @@ public class UserAuthService implements UserDetailsService {
             throw new UserNotActivatedException("用户: " + lowercaseLogin + " 处于未激活状态！");
         }
         List<GrantedAuthority> grantedAuthorities = user.getRoles().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getName().startsWith("ROLE_") ? authority.getName() : "ROLE_" + authority.getName()))
-//                .map(authority -> new SimpleGrantedAuthority(authority.getName()))
+//                .map(authority -> new SimpleGrantedAuthority(authority.getName().startsWith("ROLE_") ? authority.getName() : "ROLE_" + authority.getName()))
+                .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                 .collect(Collectors.toList());
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), grantedAuthorities);
     }

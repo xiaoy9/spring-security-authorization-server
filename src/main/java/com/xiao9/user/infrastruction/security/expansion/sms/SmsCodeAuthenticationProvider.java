@@ -1,5 +1,6 @@
 package com.xiao9.user.infrastruction.security.expansion.sms;
 
+import com.xiao9.user.infrastruction.security.error.VerificationCodeException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,7 +26,7 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
         String trueCode = "OK";
         if(StringUtils.isEmpty(trueCode) || !trueCode.equals(code)) {
-            throw new RuntimeException("手机验证码不正确！");
+            throw new VerificationCodeException("手机验证码已过期或者不正确！");
         }
         UserDetails userDetails = userDetailsService.loadUserByUsername("yy");
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, "", userDetails.getAuthorities());

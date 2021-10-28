@@ -30,12 +30,10 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider {
 
-    private static final String AUTHORITIES_KEY = "authorities";
-
-    private Key key;
-
     @Resource
     private KeyPair keyPair;
+
+    private static final String AUTHORITIES_KEY = "authorities";
 
     private long tokenValidityInMilliseconds;
 
@@ -43,9 +41,6 @@ public class TokenProvider {
 
     @PostConstruct
     public void init() {
-        String secret = TokenConstants.SECRET;
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
         this.tokenValidityInMilliseconds = TokenConstants.TOKEN_VALIDITY_IN_SECONDS * 1000;
         this.tokenValidityInMillisecondsForRememberMe = TokenConstants.TOKEN_VALIDITY_IN_SECONDS_FOR_REMEMBER_ME * 1000;
     }
@@ -68,7 +63,7 @@ public class TokenProvider {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .signWith(keyPair.getPrivate(), SignatureAlgorithm.HS512)
+                .signWith(keyPair.getPrivate(), SignatureAlgorithm.RS512)
                 .setExpiration(validity)
                 .compact();
     }
@@ -85,8 +80,8 @@ public class TokenProvider {
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
-
-        User principal = new User(claims.get("user_name", String.class), "", authorities);
+        String username = claims.getSubject() == null ? claims.get("user_name", String.class) : claims.getSubject();
+        User principal = new User(username, "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

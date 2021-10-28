@@ -1,4 +1,4 @@
-package com.xiao9.user.infrastruction.config;
+package com.xiao9.user.infrastruction.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

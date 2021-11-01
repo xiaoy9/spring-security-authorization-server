@@ -20,10 +20,10 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
         String mobile = (String) authentication.getPrincipal();
         String code = (String) authentication.getCredentials();
 
+        // 验证码测试
         String trueCode = "OK";
         if(StringUtils.isEmpty(trueCode) || !trueCode.equals(code)) {
             throw new VerificationCodeException("手机验证码已过期或者不正确！");
@@ -31,9 +31,10 @@ public class SmsCodeAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = userDetailsService.loadUserByUsername("yy");
         SmsCodeAuthenticationToken result = new SmsCodeAuthenticationToken(userDetails, "", userDetails.getAuthorities());
         result.setDetails(authentication.getDetails());
-        result.setAuthenticated(true);
         return result;
     }
+
+
 
     @Override
     public boolean supports(Class<?> authentication) {

@@ -17,11 +17,19 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
      * will return <code>false</code>.
      *
      */
+    public SmsCodeAuthenticationToken(Object principal, Object credentials) {
+        super(null);
+        this.principal = principal;
+        this.credentials = credentials;
+        super.setAuthenticated(false);
+    }
+
+
     public SmsCodeAuthenticationToken(Object principal, Object credentials, Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;
         this.credentials = credentials;
-        setAuthenticated(false);
+        super.setAuthenticated(true);
     }
 
 

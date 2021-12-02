@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@EnableAuthorizationServer
-@Configuration
+//@EnableAuthorizationServer
+//@Configuration
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
     private AuthenticationManager authenticationManager;

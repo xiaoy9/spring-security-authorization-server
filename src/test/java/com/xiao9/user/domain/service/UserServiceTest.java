@@ -3,7 +3,7 @@ package com.xiao9.user.domain.service;
 import com.xiao9.user.domain.IUserRepository;
 import com.xiao9.user.domain.Role;
 import com.xiao9.user.domain.User;
-import com.xiao9.user.infrastruction.security.AuthoritiesConstants;
+import com.xiao9.user.infrastructure.security.AuthoritiesConstants;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

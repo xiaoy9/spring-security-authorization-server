@@ -6,6 +6,7 @@ import com.xiao9.user.domain.Role;
 import com.xiao9.user.domain.User;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.RandomString;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -20,14 +21,16 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+
     private final PasswordEncoder passwordEncoder;
 
     private final IRoleRepository roleRepository;
 
     private final IUserRepository userRepository;
 
-    public UserService(PasswordEncoder passwordEncoder, IRoleRepository roleRepository, IUserRepository userRepository) {
-        this.passwordEncoder = passwordEncoder;
+
+    public UserService(IRoleRepository roleRepository, IUserRepository userRepository) {
+        this.passwordEncoder = NoOpPasswordEncoder.getInstance();
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
     }
